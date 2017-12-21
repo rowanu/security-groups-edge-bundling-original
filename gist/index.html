@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+	.node {
+		font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+		fill: #bbb;
+	}
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1px;
+  }
+
+	.node:hover {
+		fill: #000;
+	}
+
+	.link {
+		stroke: steelblue;
+		stroke-opacity: .4;
+		fill: none;
+		pointer-events: none;
+	}
+
+	.node:hover,
+	.node--source,
+	.node--target {
+		font-weight: 700;
+	}
+
+	.node--source {
+		fill: #2ca02c;
+	}
+
+	.node--target {
+		fill: #d62728;
+	}
+
+	.link--source,
+	.link--target {
+		stroke-opacity: 1;
+		stroke-width: 2px;
+	}
+
+	.link--source {
+		stroke: #d62728;
+	}
+
+	.link--target {
+		stroke: #2ca02c;
+  }
+</style>
+<body>
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <script>
+  var diameter = 480,
+    radius = diameter / 2,
+    innerRadius = radius - 180;
+
+  var cluster = d3.layout.cluster()
+    .size([360, innerRadius])
+    .sort(null);
+
+  var bundle = d3.layout.bundle();
+
+  var line = d3.svg.line.radial()
+      .interpolate('bundle')
+      .tension(.85)
+      .radius(function (d) { return d.y; })
+      .angle(function (d) { return d.x / 180 * Math.PI })
+
+  var svg = d3.select('body').append('svg')
+    .attr('width', diameter)
+    .attr('height', diameter)
+    .append('g')
+      .attr('transform', 'translate(' + radius + ',' + radius + ')');
+
+  var link = svg.append('g').selectAll('.link'),
+    node = svg.append('g').selectAll('.node');
+
+  d3.json('data.json', function (error, securityGroups) {
+    if (error) throw error;
+
+    var nodes = cluster.nodes(groupHierarchy(securityGroups)),
+      links = makeLinks(nodes);
+
+    link = link.data(bundle(links))
+      .enter()
+      .append('path')
+      .each(function (d) { return d.source = d[0], d.target = d[d.length - 1]; })
+      .attr('class', 'link')
+      .attr('d', line);
+
+    var node = svg.selectAll('g.node')
+      .data(nodes.filter(function (n) { return !n.children; }))
+    .enter().append('g')
+      .attr('class', 'node')
+      .attr('transform', function (d) {
+        return `rotate(${d.x - 90})translate(${d.y})`;
+      });
+
+    node.append('text')
+        .attr('class', 'node')
+        .attr('dy', '0.31em')
+        .attr('dx', function (d) {
+          return d.x < 180 ? '0.31em' : '-0.31em';
+        })
+        .attr('transform', function (d) {
+          return d.x < 180 ? '' : 'rotate(180)';
+        })
+        .style('text-anchor', function(d) {
+          return d.x < 180 ? 'start' : 'end';
+        })
+        .text(function (d) { return d.name; })
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout);
+  });
+
+  // Highlights inbound/outbound links.
+  var mouseover = function (d) {
+    node.each(function (n) { n.target = n.source = false; });
+
+    link
+      .classed('link--target', function (l) {
+        if (l.target === d) { return l.source.source = true; }
+      })
+      .classed('link--source', function (l) {
+        if (l.source === d) { return l.target.target = true; }
+      });
+
+    node
+      .classed('node--target', function (n) { return n.target; })
+      .classed('node--source', function (n) { return n.source; })
+  }
+
+// Resets any highlighted links.
+var mouseout = function (d) {
+  link
+    .classed('link--target', false)
+    .classed('link--source', false);
+
+  node
+    .classed('node--target', false)
+    .classed('node--source', false);
+}
+
+  var groupHierarchy = function (groups) {
+    var map = {};
+    var root = {name: '', children: []};
+
+    function find(name, data) {
+      var node = map[name];
+      if (!node) {
+        node = map[name] = data || {name: name, children: []};
+        node.parent = root;
+        node.parent.children.push(node);
+      }
+      return node;
+    }
+
+    groups.forEach(function (d) { find(d.name, d); });
+    groups.forEach(function (d) {
+      d.ingress.forEach(function (i) { find(i.name); });
+    });
+
+    return root;
+  };
+
+  var makeLinks = function (nodes) {
+    var map = {},
+      links = [];
+
+    // Map IDs/Names to SGs
+    nodes.forEach(function (n) {
+      map[n.name] = n;
+    });
+
+    // Create links between SGs
+    nodes.forEach(function (n) {
+      if (n.ingress) {
+        n.ingress.forEach(function (i) {
+          links.push({source: map[i.name], target: map[n.name]});
+        })
+      }
+    });
+
+    return links;
+  }
+	</script>
+</body>

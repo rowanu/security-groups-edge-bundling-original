@@ -1,0 +1,228 @@
+{
+  "SecurityGroups": [
+    {
+      "OwnerId": "742236267657",
+      "GroupName": "AppName-AppServer-ASG-SG",
+      "GroupId": "sg-b8ce4cc0",
+      "Description": "Security group for AppName app server ASG",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 8080,
+          "ToPort": 8080,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-f1ce4c89"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 3306,
+          "ToPort": 3306,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-87ce4cff"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "VpcId": "vpc-bffb81db",
+      "Tags": []
+    },
+    {
+      "OwnerId": "742236267657",
+      "GroupName": "AppName-AppServer-ELB-SG",
+      "GroupId": "sg-f1ce4c89",
+      "Description": "Security group for AppName app server ELB",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 8080,
+          "ToPort": 8080,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-28ce4c50"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 8080,
+          "ToPort": 8080,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-b8ce4cc0"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "VpcId": "vpc-bffb81db",
+      "Tags": []
+    },
+    {
+      "OwnerId": "742236267657",
+      "GroupName": "AppName-RDS-SG",
+      "GroupId": "sg-87ce4cff",
+      "Description": "Security group for AppName RDS",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 3306,
+          "ToPort": 3306,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-b8ce4cc0"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "-1",
+          "UserIdGroupPairs": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "PrefixListIds": []
+        }
+      ],
+      "VpcId": "vpc-bffb81db",
+      "Tags": []
+    },
+    {
+      "OwnerId": "742236267657",
+      "GroupName": "AppName-WebServer-ASG-SG",
+      "GroupId": "sg-28ce4c50",
+      "Description": "Security group for AppName web server ASG",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 80,
+          "ToPort": 80,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-64ce4c1c"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 443,
+          "ToPort": 443,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-64ce4c1c"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 8080,
+          "ToPort": 8080,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-f1ce4c89"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "VpcId": "vpc-bffb81db",
+      "Tags": []
+    },
+    {
+      "OwnerId": "742236267657",
+      "GroupName": "AppName-WebServer-ELB-SG",
+      "GroupId": "sg-64ce4c1c",
+      "Description": "Security group for AppName web server ELB",
+      "IpPermissions": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 80,
+          "ToPort": 80,
+          "UserIdGroupPairs": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "PrefixListIds": []
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 443,
+          "ToPort": 443,
+          "UserIdGroupPairs": [],
+          "IpRanges": [
+            {
+              "CidrIp": "0.0.0.0/0"
+            }
+          ],
+          "PrefixListIds": []
+        }
+      ],
+      "IpPermissionsEgress": [
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 80,
+          "ToPort": 80,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-28ce4c50"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": 443,
+          "ToPort": 443,
+          "UserIdGroupPairs": [
+            {
+              "UserId": "742236267657",
+              "GroupId": "sg-28ce4c50"
+            }
+          ],
+          "IpRanges": [],
+          "PrefixListIds": []
+        }
+      ],
+      "VpcId": "vpc-bffb81db",
+      "Tags": []
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "name": "AppName-AppServer-ASG-SG",
+    "id": "sg-b8ce4cc0",
+    "ingress": [
+      {
+        "name": "AppName-AppServer-ELB-SG",
+        "protocol": "tcp",
+        "fromPort": 8080
+      }
+    ]
+  },
+  {
+    "name": "AppName-AppServer-ELB-SG",
+    "id": "sg-f1ce4c89",
+    "ingress": [
+      {
+        "name": "AppName-WebServer-ASG-SG",
+        "protocol": "tcp",
+        "fromPort": 8080
+      }
+    ]
+  },
+  {
+    "name": "AppName-RDS-SG",
+    "id": "sg-87ce4cff",
+    "ingress": [
+      {
+        "name": "AppName-AppServer-ASG-SG",
+        "protocol": "tcp",
+        "fromPort": 3306
+      }
+    ]
+  },
+  {
+    "name": "AppName-WebServer-ASG-SG",
+    "id": "sg-28ce4c50",
+    "ingress": [
+      {
+        "name": "AppName-WebServer-ELB-SG",
+        "protocol": "tcp",
+        "fromPort": 80
+      },
+      {
+        "name": "AppName-WebServer-ELB-SG",
+        "protocol": "tcp",
+        "fromPort": 443
+      }
+    ]
+  },
+  {
+    "name": "AppName-WebServer-ELB-SG",
+    "id": "sg-64ce4c1c",
+    "ingress": [
+      {
+        "name": "0.0.0.0/0",
+        "protocol": "tcp",
+        "fromPort": 80
+      },
+      {
+        "name": "0.0.0.0/0",
+        "protocol": "tcp",
+        "fromPort": 443
+      }
+    ]
+  }
+]

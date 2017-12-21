@@ -1,0 +1,23 @@
+{
+  "name": "visualising_ec2_security_groups",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sg_to_data.js",
+  "scripts": {
+    "start": "live-server --open=gist/",
+    "test": "clear && NODE_ENV=test tap ./tests/*.test.js",
+    "test:watch": "nodemon --ext js --exec 'npm test --loglevel silent' --quiet"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.2.43",
+    "bluebird": "^3.3.4",
+    "lodash": "^4.6.1"
+  },
+  "devDependencies": {
+    "live-server": "^0.9.2",
+    "tap": "^5.7.0"
+  }
+}
